@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "515597868159",
+    "project_id": "gridmap-ai",
+    "storage_bucket": "gridmap-ai.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:515597868159:android:6b9bb8686eddadc99e334a",
+        "android_client_info": {
+          "package_name": "com.psyctech.gridmapai.gridmap_ai"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQCZJYr3rS4D0tGHb9-H_fEjZNwK1-3Xk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
