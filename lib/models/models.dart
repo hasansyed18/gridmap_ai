@@ -23,21 +23,11 @@ class Landmark {
   final String id;
   final String name;
   final CellPos position;
-  final String icon;
   const Landmark({
     required this.id,
     required this.name,
     required this.position,
-    this.icon = 'place',
   });
-
-  Map<String, dynamic> toMap() => {
-        'id': id,
-        'name': name,
-        'x': position.x,
-        'y': position.y,
-        'icon': icon,
-      };
 }
 
 class Room {
@@ -46,7 +36,6 @@ class Room {
   final List<String> aliases;
   final List<CellPos> cells;
   final bool isAccessible;
-  final String? description;
 
   const Room({
     required this.id,
@@ -54,25 +43,7 @@ class Room {
     this.aliases = const [],
     required this.cells,
     this.isAccessible = true,
-    this.description,
   });
-
-  Room copyWith({
-    String? name,
-    List<String>? aliases,
-    List<CellPos>? cells,
-    bool? isAccessible,
-    String? description,
-  }) {
-    return Room(
-      id: id,
-      name: name ?? this.name,
-      aliases: aliases ?? this.aliases,
-      cells: cells ?? this.cells,
-      isAccessible: isAccessible ?? this.isAccessible,
-      description: description ?? this.description,
-    );
-  }
 
   Map<String, dynamic> toMap(String floorId) => {
         'id': id,
@@ -87,10 +58,8 @@ class Floor {
   final String id;
   String name;
   final int level;
-  final int width;
-  final int height;
-  final double squareFeet;
-  List<List<CellType>> cells;
+  // Sparse storage — only painted cells exist
+  final Map<String, CellType> cells;
   final List<Room> rooms;
   final List<Landmark> landmarks;
 
@@ -98,24 +67,22 @@ class Floor {
     required this.id,
     required this.name,
     required this.level,
-    required this.width,
-    required this.height,
-    required this.squareFeet,
-    List<List<CellType>>? cells,
+    Map<String, CellType>? cells,
     List<Room>? rooms,
     List<Landmark>? landmarks,
-  })  : cells = cells ?? List.generate(height, (_) => List.filled(width, CellType.empty)),
+  })  : cells = cells ?? {},
         rooms = rooms ?? [],
         landmarks = landmarks ?? [];
 
-  CellType cellAt(int x, int y) {
-    if (x < 0 || x >= width || y < 0 || y >= height) return CellType.blocked;
-    return cells[y][x];
-  }
+  CellType cellAt(int x, int y) => cells['$x,$y'] ?? CellType.empty;
 
   void setCell(int x, int y, CellType type) {
-    if (x < 0 || x >= width || y < 0 || y >= height) return;
-    cells[y][x] = type;
+    final key = '$x,$y';
+    if (type == CellType.empty) {
+      cells.remove(key);
+    } else {
+      cells[key] = type;
+    }
   }
 
   Room? roomAt(int x, int y) {
@@ -138,13 +105,11 @@ class Floor {
 class Building {
   final String id;
   String name;
-  final double squareFeet;
   final List<Floor> floors;
 
   Building({
     required this.id,
     required this.name,
-    required this.squareFeet,
     List<Floor>? floors,
   }) : floors = floors ?? [];
 

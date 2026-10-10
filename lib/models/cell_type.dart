@@ -19,7 +19,7 @@ enum CellType {
 extension CellTypeX on CellType {
   String get label {
     switch (this) {
-      case CellType.empty: return 'Empty';
+      case CellType.empty: return 'Erase';
       case CellType.walkable: return 'Walkable';
       case CellType.blocked: return 'Blocked';
       case CellType.room: return 'Room';
@@ -53,7 +53,7 @@ extension CellTypeX on CellType {
 
   IconData get icon {
     switch (this) {
-      case CellType.empty: return Icons.crop_square;
+      case CellType.empty: return Icons.cleaning_services_outlined;
       case CellType.walkable: return Icons.directions_walk;
       case CellType.blocked: return Icons.block;
       case CellType.room: return Icons.meeting_room;
